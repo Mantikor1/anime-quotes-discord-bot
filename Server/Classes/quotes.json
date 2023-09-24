@@ -1,5 +1,5 @@
 [{
-    "quote": "The world isn't perfect. But it's there for us, doing the best it can… that's what makes it so damn beautiful.",
+    "quote": "The world isn't perfect. But it's there for us, doing the best it can... that's what makes it so damn beautiful.",
     "character": "Roy Mustang",
     "title": "Full Metal Alchemist"
 },
@@ -7,5 +7,20 @@
     "quote": "The thing I wished for destroyed my whole family. I brought all this suffering down on my family because I made a wish for my dad without knowing what he really wanted.",
     "character": "Kyoko Sakura",
     "title": "Puella Magi Madoka Magica"
+},
+{
+    "quote": "The loneliest people are the kindest. The saddest people smile the brightest. The most damaged people are the wisest. All because they don't wish to see anyone else suffer the way they did.",
+    "character": "Jellal Fernandes",
+    "title": "Fairy Tail"
+},
+{
+    "quote": "It was like you brought color to my life. You changed my life, all by yourself.",
+    "character": "Sawaka Kuronuma",
+    "title": "Reaching You"
+},
+{
+    "quote": "What good are dreams, if all you do is work? There's more to life than hitting the books, I hope you know.",
+    "character": "Tamaki Suou",
+    "title": "Ouran Highschool Host Club"
 }
 ]

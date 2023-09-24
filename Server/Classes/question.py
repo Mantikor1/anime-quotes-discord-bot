@@ -1,9 +1,11 @@
 import os
 import json
 import os
+import random
 
 dir = os.path.dirname(__file__)
-file = open(dir + "\\quotes.json")
+path = os.path.join(dir, "quotes.json")
+file = open(path)
 quotes = json.load(file)
 
 class Question():
@@ -15,5 +17,6 @@ class Question():
         self.titleFound = False
         self.characterFound = False
 
+    # Draw a random quote from the file
     def drawQuote(self):
-        return quotes[1]
+        return random.choice(quotes)

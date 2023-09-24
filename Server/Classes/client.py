@@ -7,6 +7,7 @@ class MyClient(discord.Client):
     def __init__(self, *args, **kwargs):
         self.channel = None
         self.question = Question()
+        self.channelID = kwargs['channelID'] # Get the channel ID from the .env file
         super(MyClient, self).__init__(*args, **kwargs)
 
     async def on_ready(self):
@@ -15,13 +16,15 @@ class MyClient(discord.Client):
         # Start the coroutine
         self.checkTime.start()
 
-        channel = self.get_channel(1080108766629990410)
+        # Get the channel
+        channel = self.get_channel(int(self.channelID))
         if channel:
             self.channel = channel
 
         # send inital question
         await self.sendQuestion()
 
+    # Creates a loop than checks the time every 1 second
     @tasks.loop(seconds=1)
     async def checkTime(self):
         currentTime = datetime.now()
@@ -29,25 +32,26 @@ class MyClient(discord.Client):
             await self.sendQuestion()
 
     async def on_message(self, message):
+
         # don't respond to ourselves
-        #print("Message received")
         if message.author == self.user:
-            #print("Message from bot")
             return
 
-        if message.content == self.question.title:
+        # Check the message content
+        if message.content == "!"+self.question.title:
             if self.question.titleFound == True:
                 await message.channel.send("Title has already been guessed...")
             await message.channel.send("You found the correct anime title: " + self.question.title)
-            self.question.titleFound = True
+            self.question.titleFound = True # Set to true for the correct answer so it can't get answered multiple times
 
-        elif message.content == self.question.character:
+        elif message.content == "!"+self.question.character:
             if self.question.characterFound == True:
                 await message.channel.send("Character has already been guessed...")
             await message.channel.send("You found the correct character: " + self.question.character)
             self.question.characterFound = True
-        else:
-            await message.channel.send("Keep on guessing lol!")
+            
+        # else:
+        #     await message.channel.send("Keep on guessing lol!")
 
         #await message.channel.send("bot still replies to messages")
         # if message.content == 'ping':
