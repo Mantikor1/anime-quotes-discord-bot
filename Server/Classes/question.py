@@ -1,6 +1,5 @@
 import os
 import json
-import os
 import random
 
 dir = os.path.dirname(__file__)

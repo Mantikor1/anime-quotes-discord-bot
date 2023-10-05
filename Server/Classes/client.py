@@ -46,40 +46,40 @@ class MyClient(discord.Client):
             await self.sendQuestion()
 
 
+    '''
+    Sends a question with a quote to all set channels (1 per guild)
+    '''
     async def sendQuestion(self, channelIDs):
+
         for channel in channelIDs:
             channelObject = self.get_channel(int(channel["channelID"]))
             if channelObject:
-                await channelObject.send('Guess the anime and character by the following quote: \n"' + self.question.quote + '"')
+                await channelObject.send('Guess the anime and character by the following quote: \n\n"' + self.question.quote + '"')
             else:
                 print(f"Channel {channel['channelID']} on guild {channel['guildID']} doesn't exist")
 
 
-    async def on_message(self, message):
+    def answerQuestion(self, type, answer):
 
-        # don't respond to ourselves
-        if message.author == self.user:
-            return
-
-        # Check the message content
-        if message.content == "!"+self.question.title:
+        if type == "title":
             if self.question.titleFound == True:
-                await message.channel.send("Title has already been guessed...")
-            await message.channel.send("You found the correct anime title: " + self.question.title)
-            self.question.titleFound = True # Set to true for the correct answer so it can't get answered multiple times
+                return "The anime has already been guessed..."
 
-        elif message.content == "!"+self.question.character:
+            if answer == self.question.title:
+                self.question.titleFound = True
+                return f"You found the correct title! The title was {self.question.title}"
+            else:
+                return "Keep on guessing LOL!"
+
+        elif type == "character":
             if self.question.characterFound == True:
-                await message.channel.send("Character has already been guessed...")
-            await message.channel.send("You found the correct character: " + self.question.character)
-            self.question.characterFound = True
-            
-        else:
-            await message.channel.send("Keep on guessing lol!")
+                return "The character has already been guessed..."
+                
+            if answer == self.question.character:
+                self.question.characterFound = True
+                return f"You found the correct title! The title was {self.question.character}"
+            else:
+                return "Keep on guessing LOL!"
 
-        await message.channel.send("bot still replies to messages")
-        if message.content == 'ping':
-            await message.channel.send('pong')
-        return
     
     

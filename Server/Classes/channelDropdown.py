@@ -15,7 +15,7 @@ class Dropdown(ui.ChannelSelect):
         await self.client.updateChannels(guildID, selectedChannelID)
 
         # Send possible text channel object here
-        await interaction.response.send_message(f'The new channel is #{self.values[0]}')
+        await interaction.response.send_message(f'The new channel is #{self.values[0]}', ephemeral=True)
 
 
 class DropdownView(ui.View):

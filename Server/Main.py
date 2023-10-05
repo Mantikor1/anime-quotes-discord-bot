@@ -15,10 +15,25 @@ intents.message_content = True
 client = MyClient(intents=intents, command_prefix="/")
 tree = app_commands.CommandTree(client)
 
-@tree.command(name="settings", description="this is a test command", guild=Object(id=949628705553137684))
-async def testcommand(interaction: Interaction):
-    await interaction.response.send_message('Please select the target channel for the quiz: ', view=DropdownView(client))
+### Registered commands
+@tree.command(name="settings", description="You can set the channel for the bot to post the quiz questions here!", guild=Object(id=949628705553137684))
+async def commandSettings(interaction: Interaction):
+    await interaction.response.send_message('Please select the target channel for the quiz: ', view=DropdownView(client), ephemeral=True)
+
+@tree.command(name="anime", description="Guess the title of the anime!", guild=Object(id=949628705553137684))
+async def commandAnimeTitle(interaction: Interaction, title: str):
+    await interaction.response.send_message(client.answerQuestion("title", title))
+
+@tree.command(name="character", description="Guess the character!", guild=Object(id=949628705553137684))
+async def commandAnimeTitle(interaction: Interaction, character: str):
+    await interaction.response.send_message(client.answerQuestion("character", character))
+
+# Only comment this in, when you made changes to the commands
+@client.event
+async def on_ready():
+    print('Logged on as', client.user)  
     await tree.sync(guild=Object(id=949628705553137684))
+    print(f'Synced')
 
 token = os.getenv("BOT_TOKEN")
 client.run(token)
