@@ -1,16 +1,28 @@
 import discord
 from discord.ext import tasks
 from datetime import datetime
+import csv
 from Classes.question import Question
+import os
 
 class MyClient(discord.Client):
 
     def __init__(self, *args, **kwargs):
 
-        # This should rather be a file or database entry to make it restart consistent
         self.channelIDs = []
+
+        with open(os.path.dirname(__file__) + '/../Data/channels.csv', "r", newline='') as csvfile:
+            csvreader = csv.reader(csvfile, delimiter=' ')
+            for row in csvreader:
+                if row:
+                    channel = {"guildID": row[0], "channelID": row[1]}
+                    self.channelIDs.append(channel)
+                else:
+                    print("ChannelID file is empty")
+
+        # print(self.channelIDs)
+        
         self.question = Question()
-        #self.channelID = kwargs['channelID'] # Get the channel ID from the .env file
 
         super(MyClient, self).__init__(*args, **kwargs)
 
@@ -21,6 +33,11 @@ class MyClient(discord.Client):
         # send inital question
         # await self.sendQuestion(self.channelIDs)
 
+    def updateChannelFile(self, channelList):
+        with open(os.path.dirname(__file__) + '/../Data/channels.csv', "w", newline='') as csvfile:
+            csvwriter = csv.writer(csvfile, delimiter=' ')
+            for channel in channelList:
+                csvwriter.writerow([channel["guildID"], channel["channelID"]])
 
     async def updateChannels(self, guildID, channelID):
         
@@ -28,12 +45,14 @@ class MyClient(discord.Client):
             if object["guildID"] == guildID:
                 # Existing guild found to update
                 object["channelID"] = channelID
+                self.updateChannelFile(self.channelIDs)
                 print(f'Updated existing guild channel: {channelID}')
                 await self.sendQuestion(self.channelIDs)
                 return
         
         # New guild with new channel
         self.channelIDs.append({"guildID": guildID, "channelID": channelID})
+        self.updateChannelFile(self.channelIDs)
         print(f'Added new channel {channelID} for guild {guildID}')
         await self.sendQuestion(self.channelIDs)
 

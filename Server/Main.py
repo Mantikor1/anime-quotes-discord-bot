@@ -28,12 +28,12 @@ async def commandAnimeTitle(interaction: Interaction, title: str):
 async def commandAnimeTitle(interaction: Interaction, character: str):
     await interaction.response.send_message(client.answerQuestion("character", character))
 
-# Only comment this in, when you made changes to the commands
-@client.event
-async def on_ready():
-    print('Logged on as', client.user)  
-    await tree.sync(guild=Object(id=949628705553137684))
-    print(f'Synced')
+# # Only comment this in, when you made changes to the commands
+# @client.event
+# async def on_ready():
+#     print('Logged on as', client.user)  
+#     await tree.sync(guild=Object(id=949628705553137684))
+#     print('Synced')
 
 token = os.getenv("BOT_TOKEN")
 client.run(token)
