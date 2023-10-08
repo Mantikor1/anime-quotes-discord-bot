@@ -1,5 +1,5 @@
-import os
-from discord import Intents, app_commands, Interaction, Object
+from os import getenv
+from discord import Intents, app_commands, Interaction
 from dotenv import load_dotenv
 from Classes.client import MyClient
 from Classes.channelDropdown import DropdownView
@@ -19,6 +19,7 @@ tree = app_commands.CommandTree(client)
 @tree.command(name="settings", description="You can set the channel for the bot to post the quiz questions here!")
 async def commandSettings(interaction: Interaction):
     await interaction.response.send_message('Please select the target channel for the quiz: ', view=DropdownView(client), ephemeral=True)
+
 
 @tree.command(name="anime", description="Guess the title of the anime!")
 async def commandAnimeTitle(interaction: Interaction, title: str):
@@ -41,7 +42,7 @@ async def on_guild_remove(guild):
 #     await tree.sync()
 #     print('Synced')
 
-token = os.getenv("BOT_TOKEN")
+token = getenv("BOT_TOKEN")
 client.run(token)
 
 

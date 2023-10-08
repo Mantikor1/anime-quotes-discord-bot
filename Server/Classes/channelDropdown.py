@@ -12,7 +12,8 @@ class Dropdown(ui.ChannelSelect):
         guildID = self.values[0].guild_id
 
         # Update the clients saved channels 
-        await self.client.updateChannels(guildID, selectedChannelID)
+        # This looks weird, importing the whole class just to call one method, maybe changeable?
+        await self.client.updateChannels(str(guildID), str(selectedChannelID))
 
         # Send possible text channel object here
         await interaction.response.send_message(f'The new channel is #{self.values[0]}', ephemeral=True)

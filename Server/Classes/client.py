@@ -28,21 +28,24 @@ class MyClient(discord.Client):
 
 
     async def on_ready(self):
+        # Just a log message
         print('Logged on as', self.user)
 
 
     def updateChannelFile(self, channelList):
+
+        # Rewrite the whole channel file
         with open(os.path.dirname(__file__) + '/../Data/channels.csv', "w", newline='') as csvfile:
             csvwriter = csv.writer(csvfile, delimiter=' ')
             for channel in channelList:
                 csvwriter.writerow([channel["guildID"], channel["channelID"]])
 
 
-    async def updateChannels(self, guildID, channelID):
+    async def updateChannels(self, guildID: str, channelID: str):
         
         for object in self.channelIDs:
             # PYTHON TYPES!!!!!!!!!!!!!!!!!!!!
-            if object["guildID"] == str(guildID):
+            if object["guildID"] == guildID:
                 # Existing guild found to update
                 object["channelID"] = channelID
                 self.updateChannelFile(self.channelIDs)
