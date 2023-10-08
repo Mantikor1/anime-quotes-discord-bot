@@ -11,6 +11,7 @@ class MyClient(discord.Client):
 
         self.channelIDs = []
 
+        # Load all channel IDs from the csv file into the class
         with open(os.path.dirname(__file__) + '/../Data/channels.csv', "r", newline='') as csvfile:
             csvreader = csv.reader(csvfile, delimiter=' ')
             for row in csvreader:
@@ -20,8 +21,7 @@ class MyClient(discord.Client):
                 else:
                     print("ChannelID file is empty")
 
-        # print(self.channelIDs)
-        
+        # Get a question for the day
         self.question = Question()
 
         super(MyClient, self).__init__(*args, **kwargs)
@@ -30,8 +30,6 @@ class MyClient(discord.Client):
     async def on_ready(self):
         print('Logged on as', self.user)
 
-        # send inital question
-        # await self.sendQuestion(self.channelIDs)
 
     def updateChannelFile(self, channelList):
         with open(os.path.dirname(__file__) + '/../Data/channels.csv', "w", newline='') as csvfile:
@@ -39,10 +37,12 @@ class MyClient(discord.Client):
             for channel in channelList:
                 csvwriter.writerow([channel["guildID"], channel["channelID"]])
 
+
     async def updateChannels(self, guildID, channelID):
         
         for object in self.channelIDs:
-            if object["guildID"] == guildID:
+            # PYTHON TYPES!!!!!!!!!!!!!!!!!!!!
+            if object["guildID"] == str(guildID):
                 # Existing guild found to update
                 object["channelID"] = channelID
                 self.updateChannelFile(self.channelIDs)
@@ -78,27 +78,37 @@ class MyClient(discord.Client):
                 print(f"Channel {channel['channelID']} on guild {channel['guildID']} doesn't exist")
 
 
-    def answerQuestion(self, type, answer):
+    def answerQuestion(self, type, answer, user):
 
         if type == "title":
-            if self.question.titleFound == True:
-                return "The anime has already been guessed..."
+            # if self.question.titleFound == True:
+            #     return "The anime has already been guessed..."
 
             if answer == self.question.title:
                 self.question.titleFound = True
-                return f"You found the correct title! The title was {self.question.title}"
+                return f"{user} found the correct title!"
             else:
-                return "Keep on guessing LOL!"
+                return f"{user} guessed '{answer}'. Keep on guessing LOL!"
 
         elif type == "character":
-            if self.question.characterFound == True:
-                return "The character has already been guessed..."
+            # if self.question.characterFound == True:
+            #     return "The character has already been guessed..."
                 
             if answer == self.question.character:
                 self.question.characterFound = True
-                return f"You found the correct title! The title was {self.question.character}"
+                return f"{user} found the correct title!"
             else:
-                return "Keep on guessing LOL!"
+                return f"{user} guessed '{answer}'. Keep on guessing LOL!"
+            
+    '''
+    Remove a guild from the channel list and the csv file
+    '''
+    def removeGuild(self, guildID):
+        for index, channel in enumerate(self.channelIDs):
+            if guildID == channel["guildID"]:
+                del self.channelIDs[index]
+        self.updateChannelFile(self.channelIDs)
+
 
     
     
